@@ -168,6 +168,7 @@ cython_debug/
 # DBeaver
 .project
 .dbeaver
+/dbeaver
 
 # macOS
 *.DS_Store
