@@ -61,7 +61,7 @@ FROM
 
 -- j) How many percentage of homes cost more than 10 million?
 WITH
-	milli AS (
+	homes_10m AS (
 		SELECT
 			COUNT(*) AS number_rows,
 			COUNT(
@@ -75,7 +75,45 @@ WITH
 SELECT
 	(number_milli / number_rows) * 100.0 AS percentage
 FROM
-	milli;
+	homes_10m;
+
+-- j) ...
+SELECT
+	COUNT(*) FILTER (WHERE final_price > 10000000)
+FROM
+	main.hemnet;
+
+SELECT
+	ROUND(100.0 * COUNT(*) FILTER (WHERE final_price > 10000000) / COUNT(*), 2) as homes_10m
+FROM
+	main.hemnet
+WHERE
+	-- You might get unexpected percentages because NULL prices are included in total count
+	final_price IS NOT NULL;
+
+-- j) ...
+SELECT
+	COUNT(*)
+FROM
+	main.hemnet;
+
+SELECT
+	COUNT(CASE WHEN final_price > 10000000 THEN 1 END)
+FROM
+	main.hemnet;
+
+SELECT
+	ROUND(100.0 * COUNT(CASE WHEN final_price > 10000000 THEN 1 END) / COUNT(*), 2)
+FROM
+	main.hemnet;
+
+SELECT
+	ROUND(100.0 * COUNT(CASE WHEN final_price > 10000000 THEN 1 END) / COUNT(*), 2)
+FROM
+	main.hemnet
+WHERE
+	-- You might get unexpected percentages because NULL prices are included in total count
+	final_price IS NOT NULL;
 
 -- k) Feel free to explore anything else you find interesting in this dataset.
 SELECT
@@ -85,3 +123,7 @@ FROM
 	main.hemnet
 ORDER BY
 	room_density DESC;
+
+-- x)
+
+SUMMARIZE main.hemnet;
