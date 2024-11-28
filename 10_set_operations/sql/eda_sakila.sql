@@ -45,6 +45,16 @@ WHERE (
     AND last_name = 'DAVIS'
 );  -- actor_id 101 and 110
 
+-- get first actor_id
+SELECT FIRST(actor_id) as actor_id, first_name, last_name
+FROM main.actor
+WHERE (
+    first_name = 'SUSAN'
+    AND last_name = 'DAVIS'
+)
+GROUP BY first_name, last_name
+ORDER BY actor_id;
+
 
 SELECT DISTINCT COUNT(*) FROM main.film_actor;
 SELECT COUNT(DISTINCT actor_id) FROM main.film_actor;
