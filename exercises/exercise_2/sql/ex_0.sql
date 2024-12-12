@@ -77,4 +77,27 @@ ORDER BY p.n_rolls;
 
 -- e) What is the theoretical mean?
 
--- TODO!
+-- mean = sum(value * prob for value, prob in zip(values, probabilities))
+-- sum(value * prob)
+
+-- OVER () is a 'Window Function'
+
+-- calculate values for each side of the dice
+WITH prob AS (
+    SELECT v,  -- side value
+        count(*) OVER () AS c,  -- total n sides
+        1.0 / c AS p  -- equal probability for each side
+    FROM generate_series(1,6) AS t(v)
+)
+SELECT *
+FROM prob;
+
+-- sum all value * probability calculations
+WITH prob AS (
+    SELECT v,
+        count(*) OVER () AS c,
+        1.0 / c AS p
+    FROM generate_series(1,6) AS t(v)
+)
+SELECT sum(v * p) as theoretical_mean
+FROM prob;
