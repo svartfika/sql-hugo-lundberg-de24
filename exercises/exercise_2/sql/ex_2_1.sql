@@ -20,4 +20,32 @@ SELECT * FROM information_schema.schemata WHERE schema_name IN ('staging', 'refi
 
 -- b) Now transform and clean the data and place the cleaned table inside the refined schema.
 
+SUMMARIZE staging.sql_terms;
+SELECT * FROM staging.sql_terms;
+
+-- SELECT 
+--     trim(upper(sql_word)) AS sql_word,
+--     trim(regexp_replace(description, '\s+', ' ', 'g')) AS description,
+--     trim(lower(regexp_replace(
+--         regexp_replace(example, '(\()\s+|\s+(\))|\s+([,;])', '\1\2\3', 'g')
+--         , '(\s+)', ' ', 'g')
+--     )) AS example
+-- FROM staging.sql_terms;
+
+CREATE TABLE refined.sql_terms AS (
+    SELECT 
+        trim(upper(sql_word)) AS sql_word,
+        trim(regexp_replace(description, '\s+', ' ', 'g')) AS description,
+        trim(lower(regexp_replace(
+            regexp_replace(example, '(\()\s+|\s+(\))|\s+([,;])', '\1\2\3', 'g')
+            , '(\s+)', ' ', 'g')
+        )) AS example
+    FROM staging.sql_terms    
+);
+
+SUMMARIZE refined.sql_terms;
+SELECT * FROM refined.sql_terms;
+
 -- c) Practice filtering and searching for different keywords in different columns. Discuss with a friend why this could be useful in this case.
+
+TODO!
